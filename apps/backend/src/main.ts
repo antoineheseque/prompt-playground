@@ -2,12 +2,14 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { ChatExceptionFilter } from './common/filters/chat-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const port = Number(process.env.PORT ?? 3000);
 
   app.setGlobalPrefix('api');
+  app.useGlobalFilters(new ChatExceptionFilter());
 
   app.useGlobalPipes(
     new ValidationPipe({
