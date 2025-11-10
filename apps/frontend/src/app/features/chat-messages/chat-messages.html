@@ -26,16 +26,22 @@
   <div class="chat chat-start">
     <div class="chat-image avatar">
       <div
-        class="w-10 rounded-full bg-secondary flex items-center justify-center"
+        [class]="message.isError ? 'w-10 rounded-full bg-error flex items-center justify-center' : 'w-10 rounded-full bg-secondary flex items-center justify-center'"
       >
-        <span class="text-secondary-content text-lg">🤖</span>
+        <span
+          [class]="message.isError ? 'text-error-content text-lg' : 'text-secondary-content text-lg'"
+        >
+          {{ message.isError ? '⚠️' : '🤖' }}
+        </span>
       </div>
     </div>
     <div class="chat-header mb-1">
-      <span class="text-sm opacity-70">Assistant IA</span>
+      <span class="text-sm opacity-70"
+        >{{ message.isError ? 'Erreur' : 'Assistant IA' }}</span
+      >
     </div>
     <div
-      class="chat-bubble chat-bubble-secondary text-secondary-content shadow-lg max-w-xl"
+      [class]="message.isError ? 'chat-bubble chat-bubble-error text-error-content shadow-lg max-w-xl' : 'chat-bubble chat-bubble-secondary text-secondary-content shadow-lg max-w-xl'"
     >
       <pre class="whitespace-pre-wrap font-sans">{{ message.content }}</pre>
     </div>

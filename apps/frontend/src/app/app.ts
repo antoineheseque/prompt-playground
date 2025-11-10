@@ -22,6 +22,21 @@ export class App {
   ]);
   protected isWaitingAnswer = signal(false);
 
+  private getErrorMessage(status?: number): string {
+    switch (status) {
+      case 401:
+        return "Clé invalide ou non reconnue.\nVérifiez que la clé est correcte et qu'il n'y a pas d'espace en trop.";
+      case 404:
+        return 'Modèle introuvable.\nVérifiez le nom du modèle (ClovisLLM, etc.).';
+      case 429:
+        return 'Trop de requêtes ou limite atteinte.\nAttendez quelques secondes avant de réessayer.';
+      case 500:
+        return "Erreur interne du modèle ou du proxy.\nContactez l'administrateur de l'instance.";
+      default:
+        return "Une erreur inattendue s'est produite.\nVeuillez réessayer dans quelques instants.";
+    }
+  }
+
   onMessageSent({
     prompt,
     temperature,
@@ -57,14 +72,16 @@ export class App {
       })
       .catch((error) => {
         console.error('Error calling chat API:', error);
+        const status = error.status || error.statusCode;
+        const errorMessage = this.getErrorMessage(status);
+
         this.messages.update((msgs) => [
           ...msgs,
           {
             type: 'response',
-            content: `Erreur lors de l'appel à l'API: ${
-              error.message || 'Erreur inconnue'
-            }`,
+            content: errorMessage,
             timestamp: new Date(),
+            isError: true,
           },
         ]);
       })

@@ -29,6 +29,50 @@ export class ChatController {
     description:
       'Invalid request parameters (e.g., temperature out of range, invalid response format)',
   })
+  @ApiResponse({
+    status: 401,
+    description: 'Invalid or unrecognized API key',
+    schema: {
+      type: 'object',
+      properties: {
+        statusCode: { type: 'number', example: 401 },
+        message: { type: 'string', example: 'Invalid API key' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Requested model not found',
+    schema: {
+      type: 'object',
+      properties: {
+        statusCode: { type: 'number', example: 404 },
+        message: { type: 'string', example: 'Model not found' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 429,
+    description: 'Rate limit exceeded',
+    schema: {
+      type: 'object',
+      properties: {
+        statusCode: { type: 'number', example: 429 },
+        message: { type: 'string', example: 'Rate limit exceeded' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 502,
+    description: 'Upstream service error',
+    schema: {
+      type: 'object',
+      properties: {
+        statusCode: { type: 'number', example: 502 },
+        message: { type: 'string', example: 'Upstream service error' },
+      },
+    },
+  })
   async processChat(
     @Body() requestDto: ChatRequestDto
   ): Promise<ChatResponseDto> {

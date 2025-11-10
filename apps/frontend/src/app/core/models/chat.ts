@@ -2,6 +2,7 @@ export interface ChatMessage {
   type: 'request' | 'response';
   content: string;
   timestamp?: Date;
+  isError?: boolean;
 }
 
 export interface ChatInputData {
