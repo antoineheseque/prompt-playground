@@ -67,6 +67,12 @@ export class App {
             type: 'response',
             content: response.response,
             timestamp: new Date(),
+            metadata: {
+              promptTokens: response.usage.promptTokens,
+              completionTokens: response.usage.completionTokens,
+              totalTokens: response.usage.totalTokens,
+              latency: response.latency,
+            },
           },
         ]);
       })

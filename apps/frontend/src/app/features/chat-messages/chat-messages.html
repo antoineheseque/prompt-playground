@@ -1,4 +1,7 @@
-<div #scrollContainer class="flex flex-col gap-6 p-6 overflow-y-auto h-full max-w-4xl mx-auto">
+<div
+  #scrollContainer
+  class="flex flex-col gap-6 p-6 overflow-y-auto h-full max-w-4xl mx-auto"
+>
   @for (message of messages(); track $index) { @if (message.type ==='request') {
   <div class="chat chat-end">
     <div class="chat-image avatar">
@@ -46,8 +49,22 @@
       <pre class="whitespace-pre-wrap font-sans">{{ message.content }}</pre>
     </div>
     @if (message.timestamp) {
-    <div class="chat-footer opacity-50 mt-1">
+    <div class="chat-footer opacity-50 mt-1 flex flex-col gap-1">
       <time class="text-xs">{{ message.timestamp | date : 'short' }}</time>
+      @if (message.metadata) {
+      <div class="flex gap-3 text-xs">
+        <span class="badge badge-xs"
+          >🎯 {{ message.metadata.promptTokens }} tokens (entrée)</span
+        >
+        <span class="badge badge-xs"
+          >💬 {{ message.metadata.completionTokens }} tokens (sortie)</span
+        >
+        <span class="badge badge-xs"
+          >📊 {{ message.metadata.totalTokens }} tokens (total)</span
+        >
+        <span class="badge badge-xs">⚡ {{ message.metadata.latency }}ms</span>
+      </div>
+      }
     </div>
     }
   </div>

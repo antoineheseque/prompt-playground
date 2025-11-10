@@ -3,6 +3,12 @@ export interface ChatMessage {
   content: string;
   timestamp?: Date;
   isError?: boolean;
+  metadata?: {
+    promptTokens?: number;
+    completionTokens?: number;
+    totalTokens?: number;
+    latency?: number;
+  };
 }
 
 export interface ChatInputData {
