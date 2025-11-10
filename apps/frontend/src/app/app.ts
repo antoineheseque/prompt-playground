@@ -1,11 +1,12 @@
 import { Component, signal, inject } from '@angular/core';
 import { ChatMessagesComponent } from './features/chat-messages/chat-messages';
 import { ChatInputComponent } from './features/chat-input/chat-input';
+import { HeaderComponent } from './features/header/header';
 import { ChatService } from './core/services/chat.service';
 import { ChatInputData, ChatMessage } from './core/models/chat';
 
 @Component({
-  imports: [ChatMessagesComponent, ChatInputComponent],
+  imports: [HeaderComponent, ChatMessagesComponent, ChatInputComponent],
   selector: 'app-root',
   templateUrl: './app.html',
 })
