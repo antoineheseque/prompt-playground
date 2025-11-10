@@ -1,0 +1,147 @@
+<div class="max-w-4xl mx-auto p-4 sm:p-6">
+  <div class="collapse collapse-arrow bg-base-300 mb-4 shadow-lg">
+    <input type="checkbox" />
+    <div class="collapse-title text-lg font-medium">⚙️ Paramètres avancés</div>
+    <div class="collapse-content">
+      <form [formGroup]="chatForm">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4">
+          <div class="form-control">
+            <div class="label">
+              <span class="label-text font-semibold">🌡️ Température</span>
+              <span class="label-text-alt badge badge-primary"
+                >{{ chatForm.controls.temperature.value }}</span
+              >
+            </div>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+              formControlName="temperature"
+              class="range range-primary range-sm"
+            />
+            <div
+              class="flex w-full justify-between px-2 text-xs mt-2 opacity-60"
+            >
+              <span>Précis</span>
+              <span>Équilibré</span>
+              <span>Créatif</span>
+            </div>
+          </div>
+
+          <!-- Max Tokens Input -->
+          <div class="form-control">
+            <div class="label">
+              <span class="label-text font-semibold">📊 Tokens max</span>
+            </div>
+            <input
+              type="number"
+              formControlName="maxTokens"
+              min="1"
+              max="4000"
+              [class.input-error]="isFieldInvalid('maxTokens')"
+              class="input input-bordered input-primary w-full"
+              placeholder="150"
+            />
+            @if (isFieldInvalid('maxTokens')) {
+            <div class="label">
+              <span class="label-text-alt text-error"
+                >Minimum 1 token requis</span
+              >
+            </div>
+            }
+          </div>
+
+          <div class="form-control">
+            <div class="label">
+              <span class="label-text font-semibold">📝 Format</span>
+            </div>
+            <select
+              formControlName="responseFormat"
+              class="select select-bordered select-primary w-full"
+            >
+              <option value="text">📄 Texte</option>
+              <option value="json">🔧 JSON</option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card bg-base-300 shadow-xl">
+    <div class="card-body p-4">
+      <form [formGroup]="chatForm" (ngSubmit)="sendMessage()">
+        <div class="flex flex-col sm:flex-row gap-3">
+          <div class="flex-1">
+            <textarea
+              formControlName="prompt"
+              [class.textarea-error]="isFieldInvalid('prompt')"
+              class="textarea textarea-bordered textarea-primary w-full min-h-24 text-base bg-base-100"
+              placeholder="💭 Tapez votre message ici... (Entrée pour envoyer, Maj+Entrée pour nouvelle ligne)"
+              rows="3"
+              (keydown)="onKeyDown($event)"
+              [disabled]="isWaitingAnswer()"
+            ></textarea>
+            @if (isFieldInvalid('prompt')) {
+            <div class="label">
+              <span class="label-text-alt text-error"
+                >Le message est requis</span
+              >
+            </div>
+            }
+          </div>
+          <div class="flex sm:flex-col gap-2">
+            <button
+              type="submit"
+              [disabled]="chatForm.invalid || isWaitingAnswer()"
+              class="btn btn-primary btn-lg flex-1 sm:flex-none shadow-lg"
+            >
+              @if (isWaitingAnswer()) {
+              <span class="loading loading-spinner loading-md"></span>
+              <span class="hidden sm:inline">Envoi...</span>
+              } @else {
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
+                />
+              </svg>
+              <span class="hidden sm:inline">Envoyer</span>
+              }
+            </button>
+            <button
+              type="button"
+              (click)="clearPrompt()"
+              class="btn btn-ghost btn-lg flex-1 sm:flex-none"
+              title="Effacer"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

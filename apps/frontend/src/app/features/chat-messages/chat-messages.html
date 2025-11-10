@@ -1,0 +1,67 @@
+<div class="flex flex-col gap-6 p-6 overflow-y-auto h-full max-w-4xl mx-auto">
+  @for (message of messages(); track $index) { @if (message.type ==='request') {
+  <div class="chat chat-end">
+    <div class="chat-image avatar">
+      <div
+        class="w-10 rounded-full bg-primary flex items-center justify-center"
+      >
+        <span class="text-primary-content text-lg">👤</span>
+      </div>
+    </div>
+    <div class="chat-header mb-1">
+      <span class="text-sm opacity-70">Vous</span>
+    </div>
+    <div
+      class="chat-bubble chat-bubble-primary text-primary-content shadow-lg max-w-xl"
+    >
+      <pre class="whitespace-pre-wrap font-sans">{{ message.content }}</pre>
+    </div>
+    @if (message.timestamp) {
+    <div class="chat-footer opacity-50 mt-1">
+      <time class="text-xs">{{ message.timestamp | date : 'short' }}</time>
+    </div>
+    }
+  </div>
+  } @else {
+  <div class="chat chat-start">
+    <div class="chat-image avatar">
+      <div
+        class="w-10 rounded-full bg-secondary flex items-center justify-center"
+      >
+        <span class="text-secondary-content text-lg">🤖</span>
+      </div>
+    </div>
+    <div class="chat-header mb-1">
+      <span class="text-sm opacity-70">Assistant IA</span>
+    </div>
+    <div
+      class="chat-bubble chat-bubble-secondary text-secondary-content shadow-lg max-w-xl"
+    >
+      <pre class="whitespace-pre-wrap font-sans">{{ message.content }}</pre>
+    </div>
+    @if (message.timestamp) {
+    <div class="chat-footer opacity-50 mt-1">
+      <time class="text-xs">{{ message.timestamp | date : 'short' }}</time>
+    </div>
+    }
+  </div>
+  } } @if (isWaitingAnswer()) {
+  <div class="chat chat-start">
+    <div class="chat-image avatar">
+      <div
+        class="w-10 rounded-full bg-secondary flex items-center justify-center"
+      >
+        <span class="text-secondary-content text-lg">🤖</span>
+      </div>
+    </div>
+    <div class="chat-header mb-1">
+      <span class="text-sm opacity-70">Assistant IA</span>
+    </div>
+    <div class="chat-bubble chat-bubble-secondary shadow-lg">
+      <div class="flex items-center gap-2">
+        <span class="loading loading-dots loading-md"></span>
+      </div>
+    </div>
+  </div>
+  }
+</div>
