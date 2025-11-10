@@ -1,21 +1,34 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
-import { Logger } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app/app.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
-  const port = process.env.PORT || 3000;
+  const port = Number(process.env.PORT ?? 3000);
+
+  app.setGlobalPrefix('api');
+  app.enableVersioning({ type: VersioningType.URI });
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    })
+  );
+
+  const config = new DocumentBuilder()
+    .setTitle('Prompt Playground API')
+    .setVersion('1.0')
+    .build();
+  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/v1/docs', app, documentFactory);
+
   await app.listen(port);
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
+  console.log(`🚀 App running on http://localhost:${port.toString()}`);
+  console.log(
+    `📚 Swagger documentation available at http://localhost:${port.toString()}/api/v1/docs`
   );
 }
-
-bootstrap();
+void bootstrap();
